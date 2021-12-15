@@ -20,24 +20,6 @@ still be in flux for this library.
 $ go get github.com/woodstock-tokyo/iexcloud/v2
 ```
 
-## Examples
-
-Examples are available at <https://github.com/woodstock-tokyo/iexcloud-examples/>.
-
-## Implementation Status
-
-Please see [implementation.md][implementation] for the current implementation
-status of the IEX Cloud API.
-
-## Contributing
-
-Contributions are welcome! To contribute please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Code
-4. Submit a [pull request][]
-
 ### Testing
 
 Prior to submitting a [pull request][], please run:
