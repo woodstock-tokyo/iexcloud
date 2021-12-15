@@ -1,5 +1,5 @@
 // Copyright (c) 2019-2022 The iexcloud developers. All rights reserved.
-// Project site: https://github.com/goinvest/iexcloud
+// Project site: https://github.com/woodstock-tokyo/iexcloud
 // Use of this source code is governed by a MIT-style license that
 // can be found in the LICENSE file for the project.
 
@@ -18,7 +18,7 @@ import (
 	"testing"
 
 	"github.com/BurntSushi/toml"
-	iex "github.com/goinvest/iexcloud/v2"
+	iex "github.com/woodstock-tokyo/iexcloud/v2"
 )
 
 // Config contains the configuration information neecded to program and test

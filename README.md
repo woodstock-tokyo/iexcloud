@@ -4,7 +4,7 @@ Go library for accessing the IEX Cloud API.
 
 [![GoDoc][godoc badge]][godoc link]
 [![Go Report Card][report badge]][report card]
-[![License Badge][license badge]][LICENSE]
+[![License Badge][license badge]][license]
 
 ## Overview
 
@@ -17,12 +17,12 @@ still be in flux for this library.
 ## Installation
 
 ```bash
-$ go get github.com/goinvest/iexcloud/v2
+$ go get github.com/woodstock-tokyo/iexcloud/v2
 ```
 
 ## Examples
 
-Examples are available at <https://github.com/goinvest/iexcloud-examples/>.
+Examples are available at <https://github.com/woodstock-tokyo/iexcloud-examples/>.
 
 ## Implementation Status
 
@@ -58,12 +58,12 @@ $ make cover
 [LICENSE][] file for more information.
 
 [iexcloudio]: https://iexcloud.io
-[iexcloud]: https://github.com/goinvest/iexcloud
-[godoc badge]: https://godoc.org/github.com/goinvest/iexcloud?status.svg
-[godoc link]: https://godoc.org/github.com/goinvest/iexcloud
-[implementation]: https://github.com/goinvest/iexcloud/blob/master/implementation.md
-[LICENSE]: https://github.com/goinvest/iexcloud/blob/master/LICENSE
+[iexcloud]: https://github.com/woodstock-tokyo/iexcloud
+[godoc badge]: https://godoc.org/github.com/woodstock-tokyo/iexcloud?status.svg
+[godoc link]: https://godoc.org/github.com/woodstock-tokyo/iexcloud
+[implementation]: https://github.com/woodstock-tokyo/iexcloud/blob/master/implementation.md
+[license]: https://github.com/woodstock-tokyo/iexcloud/blob/master/LICENSE
 [license badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [pull request]: https://help.github.com/articles/using-pull-requests
-[report badge]: https://goreportcard.com/badge/github.com/goinvest/iexcloud
-[report card]: https://goreportcard.com/report/github.com/goinvest/iexcloud
+[report badge]: https://goreportcard.com/badge/github.com/woodstock-tokyo/iexcloud
+[report card]: https://goreportcard.com/report/github.com/woodstock-tokyo/iexcloud
