@@ -14,6 +14,8 @@ type AccountMetadata struct {
 	TierName         string     `json:"tierName"`
 	MessageLimit     int        `json:"messageLimit"`
 	MessagesUsed     int        `json:"messagesUsed"`
+	CreditLimit      int        `json:"creditLimit"`
+	CreditUsed       int        `json:"creditsUsed"`
 }
 
 // Usage provides current month usage for your account.
