@@ -183,7 +183,7 @@ func TestBalanceSheets(t *testing.T) {
 			requestNumber:     1,
 			responseJSON:      nominalBalanceSheetJSON,
 			wantRequestPath:   "/stock/aapl/balance-sheet/1",
-			wantQueryParams:   map[string][]string{"token": []string{testToken}, "period": []string{"annual"}},
+			wantQueryParams:   map[string][]string{"token": {testToken}, "period": {"annual"}},
 			wantBalanceSheets: nominalBalanceSheets,
 		},
 		{
@@ -193,7 +193,7 @@ func TestBalanceSheets(t *testing.T) {
 			requestNumber:     2,
 			responseJSON:      nominalBalanceSheetJSON,
 			wantRequestPath:   "/stock/goog/balance-sheet/2",
-			wantQueryParams:   map[string][]string{"token": []string{testToken}, "period": []string{"quarter"}},
+			wantQueryParams:   map[string][]string{"token": {testToken}, "period": {"quarter"}},
 			wantBalanceSheets: nominalBalanceSheets,
 		},
 	}
