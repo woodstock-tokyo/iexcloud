@@ -396,6 +396,7 @@ type Quote struct {
 	Week52Low             float64   `json:"week52Low,omitempty"`
 	YTDChange             float64   `json:"ytdChange,omitempty"`
 	PERatio               float64   `json:"peRatio,omitempty"`
+	IsUSMarketOpen        bool      `json:"isUSMarketOpen,omitempty"`
 }
 
 // VenueVolume models the 15 minute delayed and 30 day average consolidated
