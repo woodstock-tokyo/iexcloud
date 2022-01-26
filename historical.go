@@ -97,6 +97,7 @@ type HistoricalOptions struct {
 	ExactDate       string `url:"exactDate,omitempty"`
 	Sort            string `url:"sort,omitempty"`
 	IncludeToday    bool   `url:"includeToday,omitempty"`
+	ChartByDay      bool   `url:"chartByDay,omitempty"`
 }
 
 // IntradayHistoricalOptions optional query params to pass to intraday historical endpoint
