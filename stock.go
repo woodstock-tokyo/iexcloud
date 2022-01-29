@@ -386,6 +386,7 @@ type Quote struct {
 	ChangePercent         float64   `json:"changePercent,omitempty"`
 	IEXMarketPercent      float64   `json:"iexMarketPercent,omitempty"`
 	IEXVolume             int       `json:"iexVolume,omitempty"`
+	Volume                int       `json:"volume,omitempty"`
 	AvgTotalVolume        int       `json:"avgTotalVolume,omitempty"`
 	IEXBidPrice           float64   `json:"iexBidPrice,omitempty"`
 	IEXBidSize            int       `json:"iexBidSize,omitempty"`
