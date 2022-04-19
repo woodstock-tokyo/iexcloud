@@ -17,7 +17,7 @@ still be in flux for this library.
 ## Installation
 
 ```bash
-$ go get github.com/woodstock-tokyo/iexcloud/v2
+$ go get github.com/woodstock-tokyo/iexcloud
 ```
 
 ### Testing

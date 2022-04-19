@@ -95,7 +95,7 @@ func WithBaseURL(baseURL string) ClientOption {
 }
 
 // GetJSON gets the JSON data from the given endpoint.
-func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) error {
+func (c *Client) GetJSON(ctx context.Context, endpoint string, v any) error {
 	u, err := c.url(endpoint, map[string]string{"token": c.token})
 	if err != nil {
 		return err
@@ -104,7 +104,7 @@ func (c *Client) GetJSON(ctx context.Context, endpoint string, v interface{}) er
 }
 
 // GetJSONWithQueryParams gets the JSON data from the given endpoint with the query parameters attached.
-func (c *Client) GetJSONWithQueryParams(ctx context.Context, endpoint string, queryParams map[string]string, v interface{}) error {
+func (c *Client) GetJSONWithQueryParams(ctx context.Context, endpoint string, queryParams map[string]string, v any) error {
 	queryParams["token"] = c.token
 	u, err := c.url(endpoint, queryParams)
 	if err != nil {
@@ -114,7 +114,7 @@ func (c *Client) GetJSONWithQueryParams(ctx context.Context, endpoint string, qu
 }
 
 // Fetches JSON content from the given URL and unmarshals it into `v`.
-func (c *Client) FetchURLToJSON(ctx context.Context, u *url.URL, v interface{}) error {
+func (c *Client) FetchURLToJSON(ctx context.Context, u *url.URL, v any) error {
 	data, err := c.getBytes(ctx, u.String())
 	if err != nil {
 		return err
@@ -124,7 +124,7 @@ func (c *Client) FetchURLToJSON(ctx context.Context, u *url.URL, v interface{}) 
 
 // GetJSONWithoutToken gets the JSON data from the given endpoint without
 // adding a token to the URL.
-func (c *Client) GetJSONWithoutToken(ctx context.Context, endpoint string, v interface{}) error {
+func (c *Client) GetJSONWithoutToken(ctx context.Context, endpoint string, v any) error {
 	u, err := c.url(endpoint, nil)
 	if err != nil {
 		return err

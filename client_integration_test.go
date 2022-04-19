@@ -18,7 +18,7 @@ import (
 	"testing"
 
 	"github.com/BurntSushi/toml"
-	iex "github.com/woodstock-tokyo/iexcloud/v2"
+	iex "github.com/woodstock-tokyo/iexcloud"
 )
 
 // Config contains the configuration information neecded to program and test

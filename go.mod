@@ -1,4 +1,4 @@
-module github.com/woodstock-tokyo/iexcloud/v2
+module github.com/woodstock-tokyo/iexcloud
 
 require (
 	github.com/BurntSushi/toml v0.4.1
@@ -7,4 +7,4 @@ require (
 	github.com/karagog/testutil-go v0.0.0-20211208183738-8c37cec26dcb
 )
 
-go 1.11
+go 1.18
