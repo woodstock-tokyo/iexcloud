@@ -6,10 +6,12 @@
 package iex
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -122,6 +124,22 @@ func (c *Client) FetchURLToJSON(ctx context.Context, u *url.URL, v any) error {
 	return json.Unmarshal(data, v)
 }
 
+// PostJsonData POST with json data
+func (c *Client) PostJsonData(ctx context.Context, endpoint string, v any) (data []byte, err error) {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+
+	body := bytes.NewBuffer(b)
+	data, err = c.postBytes(ctx, endpoint, body)
+
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
 // GetJSONWithoutToken gets the JSON data from the given endpoint without
 // adding a token to the URL.
 func (c *Client) GetJSONWithoutToken(ctx context.Context, endpoint string, v any) error {
@@ -173,6 +191,36 @@ func (c *Client) getBytes(ctx context.Context, address string) ([]byte, error) {
 		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
 	}
 	return ioutil.ReadAll(resp.Body)
+}
+
+func (c *Client) postBytes(ctx context.Context, endpoint string, payload io.Reader) ([]byte, error) {
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.baseURL, endpoint), payload)
+	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+
+	if err != nil {
+		return []byte{}, err
+	}
+	resp, err := c.httpClient.Do(req.WithContext(ctx))
+
+	if err != nil {
+		return []byte{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		b, err := ioutil.ReadAll(resp.Body)
+		msg := ""
+
+		if err == nil {
+			msg = string(b)
+		}
+
+		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	return body, nil
 }
 
 // Returns an URL object that points to the endpoint with optional query parameters.
@@ -1487,4 +1535,21 @@ func (c Client) PriceTarget(ctx context.Context, symbol string) (PriceTarget, er
 	endpoint := fmt.Sprintf("/stock/%s/price-target", url.PathEscape(symbol))
 	err := c.GetJSON(ctx, endpoint, &pt)
 	return pt, err
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Rule Engine Endpoints
+//
+//////////////////////////////////////////////////////////////////////////////
+
+func (c Client) CreateRuleEngine(ctx context.Context, rule Rule) (result CreatedRuleResponse, err error) {
+
+	endpoint := fmt.Sprintf("/stable/rules/create")
+
+	data, err := c.PostJsonData(ctx, endpoint, rule)
+
+	json.Unmarshal(data, &result)
+
+	return
 }

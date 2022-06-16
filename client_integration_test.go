@@ -121,10 +121,43 @@ func TestIntegrationHistoricalPrices(t *testing.T) {
 	isPositiveFloat64(t, "low", got.Low)
 	isPositiveFloat64(t, "open", got.Open)
 	assertString(t, "symbol", got.Symbol, "AAPL")
-	isPositiveInt(t, "volume", got.Volume)
+	isPositiveFloat64(t, "volume", got.Volume)
 	assertScrambledString(t, "id", got.ID, "HISTORICAL_PRICES")
 	assertScrambledString(t, "key", got.Key, "AAPL")
 	assertString(t, "subkey", got.Subkey, "")
+}
+
+func TestIntegrationCreatRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	condtion1 := iex.Condition{"changePercent", ">", 1}
+	rule := iex.Rule{
+		Token:      cfg.Token,
+		RuleSet:    "AAPL",
+		Type:       "any",
+		RuleName:   "TestCreateByApi",
+		Conditions: []iex.Condition{condtion1},
+		Outputs: []iex.Output{
+			{
+				Frequency: 3600,
+				Method:    "webhook",
+				Url:       "https://fe1d0dd0654a.ngrok.io",
+			},
+		},
+	}
+
+	result, err := client.CreateRuleEngine(context.Background(), rule)
+
+	assertInt(t, "weight", int(result.Weight), 1)
+
+	if err != nil {
+		log.Fatalf("Error getting historical prices: %s", err)
+	}
+
 }
 
 func assertInt(t *testing.T, label string, got, want int) {
