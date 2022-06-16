@@ -10,6 +10,7 @@ package iex_test
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
@@ -25,6 +26,7 @@ import (
 // the adapaters.
 type Config struct {
 	Token   string
+	Secret  string
 	BaseURL string
 }
 
@@ -150,7 +152,7 @@ func TestIntegrationCreatRule(t *testing.T) {
 		},
 	}
 
-	result, err := client.CreateRuleEngine(context.Background(), rule)
+	result, err := client.CreateRulePriceAlert(context.Background(), rule)
 
 	assertInt(t, "weight", int(result.Weight), 1)
 
@@ -158,6 +160,45 @@ func TestIntegrationCreatRule(t *testing.T) {
 		log.Fatalf("Error getting historical prices: %s", err)
 	}
 
+}
+
+func TestIntegrationDeleteRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.DeleteRulePriceAlert(context.Background(), "43aafe88-42d2-4c19-9acb-bca5515cf2c0")
+	fmt.Println(result)
+}
+
+func TestIntegrationPauseRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.PauseRulePriceAlert(context.Background(), iex.PauseResumeRule{
+		Token:  cfg.Secret,
+		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
+	})
+	fmt.Println(result)
+}
+
+func TestIntegrationResumeRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.ResumeRulePriceAlert(context.Background(), iex.PauseResumeRule{
+		Token:  cfg.Secret,
+		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
+	})
+	fmt.Println(result)
 }
 
 func assertInt(t *testing.T, label string, got, want int) {

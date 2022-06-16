@@ -18,6 +18,11 @@ type (
 	}
 	Condition []any
 
+	PauseResumeRule struct {
+		Token  string `json:"token"`
+		RuleID string `json:"ruleId"`
+	}
+
 	CreatedRuleResponse struct {
 		ID     string `json:"id"`
 		Weight uint   `json:"weight"`

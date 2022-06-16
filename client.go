@@ -223,6 +223,36 @@ func (c *Client) postBytes(ctx context.Context, endpoint string, payload io.Read
 	return body, nil
 }
 
+func (c *Client) delete(ctx context.Context, endpoint string) ([]byte, error) {
+
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s%s", c.baseURL, endpoint), nil)
+
+	if err != nil {
+		return []byte{}, err
+	}
+	resp, err := c.httpClient.Do(req.WithContext(ctx))
+
+	if err != nil {
+		return []byte{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		b, err := ioutil.ReadAll(resp.Body)
+		msg := ""
+
+		if err == nil {
+			msg = string(b)
+		}
+
+		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
+	}
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(string(body))
+	return body, nil
+}
+
 // Returns an URL object that points to the endpoint with optional query parameters.
 func (c *Client) url(endpoint string, queryParams map[string]string) (*url.URL, error) {
 	u, err := url.Parse(c.baseURL + endpoint)
@@ -1543,7 +1573,7 @@ func (c Client) PriceTarget(ctx context.Context, symbol string) (PriceTarget, er
 //
 //////////////////////////////////////////////////////////////////////////////
 
-func (c Client) CreateRuleEngine(ctx context.Context, rule Rule) (result CreatedRuleResponse, err error) {
+func (c Client) CreateRulePriceAlert(ctx context.Context, rule Rule) (result CreatedRuleResponse, err error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/create")
 
@@ -1551,5 +1581,39 @@ func (c Client) CreateRuleEngine(ctx context.Context, rule Rule) (result Created
 
 	json.Unmarshal(data, &result)
 
+	return
+}
+
+func (c Client) ResumeRulePriceAlert(ctx context.Context, rule PauseResumeRule) (result CreatedRuleResponse, err error) {
+
+	endpoint := fmt.Sprintf("/stable/rules/resume")
+
+	data, err := c.PostJsonData(ctx, endpoint, rule)
+
+	json.Unmarshal(data, &result)
+
+	return
+}
+
+func (c Client) PauseRulePriceAlert(ctx context.Context, rule PauseResumeRule) (result CreatedRuleResponse, err error) {
+
+	endpoint := fmt.Sprintf("/stable/rules/pause")
+
+	data, err := c.PostJsonData(ctx, endpoint, rule)
+
+	json.Unmarshal(data, &result)
+
+	return
+}
+
+// DeleteRulePriceAlert
+//todo api doens't work, still contact to iex support
+func (c Client) DeleteRulePriceAlert(ctx context.Context, ruleID string) (result bool, err error) {
+
+	endpoint := fmt.Sprintf("/stable/rules/%s", ruleID)
+
+	data, err := c.delete(ctx, endpoint)
+	fmt.Println(data)
+	json.Unmarshal(data, &result)
 	return
 }
