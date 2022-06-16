@@ -145,7 +145,7 @@ func TestIntegrationCreatRule(t *testing.T) {
 			{
 				Frequency: 3600,
 				Method:    "webhook",
-				Url:       "https://fe1d0dd0654a.ngrok.io",
+				Url:       "https://test.ngrok.io",
 			},
 		},
 	}
