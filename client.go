@@ -223,9 +223,15 @@ func (c *Client) postBytes(ctx context.Context, endpoint string, payload io.Read
 	return body, nil
 }
 
-func (c *Client) delete(ctx context.Context, endpoint string) ([]byte, error) {
+func (c *Client) delete(ctx context.Context, endpoint string, queryParams map[string]string) ([]byte, error) {
 
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s%s", c.baseURL, endpoint), nil)
+	queryParams["token"] = c.token
+	u, err := c.url(endpoint, queryParams)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	req, err := http.NewRequest("DELETE", u.String(), nil)
 
 	if err != nil {
 		return []byte{}, err
@@ -1620,7 +1626,7 @@ func (c Client) DeleteRulePriceAlert(ctx context.Context, ruleID string) (result
 
 	endpoint := fmt.Sprintf("/stable/rules/%s", ruleID)
 
-	data, err := c.delete(ctx, endpoint)
+	data, err := c.delete(ctx, endpoint, map[string]string{})
 
 	json.Unmarshal(data, &result)
 	return

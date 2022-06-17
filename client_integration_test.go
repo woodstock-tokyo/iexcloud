@@ -203,9 +203,9 @@ func TestIntegrationDeleteRule(t *testing.T) {
 	if err != nil {
 		log.Fatalf("Error reading config file: %s", err)
 	}
-	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	client := iex.NewClient(cfg.Secret, iex.WithBaseURL(cfg.BaseURL))
 
-	result, err := client.DeleteRulePriceAlert(context.Background(), "43aafe88-42d2-4c19-9acb-bca5515cf2c0")
+	result, err := client.DeleteRulePriceAlert(context.Background(), "7395c2cc-dd12-4872-a176-31748b7b0cbb")
 	fmt.Println(result)
 }
 
