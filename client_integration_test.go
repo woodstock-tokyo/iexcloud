@@ -10,6 +10,7 @@ package iex_test
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
@@ -25,6 +26,7 @@ import (
 // the adapaters.
 type Config struct {
 	Token   string
+	Secret  string
 	BaseURL string
 }
 
@@ -121,10 +123,132 @@ func TestIntegrationHistoricalPrices(t *testing.T) {
 	isPositiveFloat64(t, "low", got.Low)
 	isPositiveFloat64(t, "open", got.Open)
 	assertString(t, "symbol", got.Symbol, "AAPL")
-	isPositiveInt(t, "volume", got.Volume)
+	isPositiveFloat64(t, "volume", got.Volume)
 	assertScrambledString(t, "id", got.ID, "HISTORICAL_PRICES")
 	assertScrambledString(t, "key", got.Key, "AAPL")
 	assertString(t, "subkey", got.Subkey, "")
+}
+
+func TestIntegrationCreatRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	condtion1 := iex.Condition{"changePercent", ">", 1}
+	rule := iex.Rule{
+		Token:      cfg.Token,
+		RuleSet:    "AAPL",
+		Type:       "any",
+		RuleName:   "TestCreateByApiNew1",
+		Conditions: []iex.Condition{condtion1},
+		Outputs: []iex.Output{
+			{
+				Frequency: 3600,
+				Method:    "webhook",
+				Url:       "https://test.ngrok.io",
+			},
+		},
+	}
+
+	result, err := client.CreateRulePriceAlert(context.Background(), rule)
+
+	assertInt(t, "weight", int(result.Weight), 1)
+
+	if err != nil {
+		log.Fatalf("Error getting historical prices: %s", err)
+	}
+
+}
+
+// it seems eix edit rule doesnt work, contact to support
+
+func TestIntegrationEditRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	condtion1 := iex.Condition{"changePercent", ">", 1}
+	rule := iex.Rule{
+		Token:      cfg.Token,
+		ID:         "6f6fc56e-516b-4568-b423-a66febca32a5",
+		RuleSet:    "AAPL",
+		Type:       "any",
+		RuleName:   "TestCreateByApiEditRule",
+		Conditions: []iex.Condition{condtion1},
+		Outputs: []iex.Output{
+			{
+				Frequency: 3600,
+				Method:    "webhook",
+				Url:       "https://test.ngrok.io",
+			},
+		},
+	}
+
+	result, err := client.CreateRulePriceAlert(context.Background(), rule)
+
+	assertInt(t, "weight", int(result.Weight), 0)
+
+	if err != nil {
+		log.Fatalf("Error getting historical prices: %s", err)
+	}
+
+}
+
+func TestIntegrationDeleteRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Secret, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.DeleteRule(context.Background(), "7395c2cc-dd12-4872-a176-31748b7b0cbb")
+	fmt.Println(result)
+}
+
+func TestIntegrationPauseRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.PauseRule(context.Background(), iex.RequestRule{
+		Token:  cfg.Secret,
+		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
+	})
+	fmt.Println(result)
+}
+
+func TestIntegrationResumeRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.ResumeRule(context.Background(), iex.RequestRule{
+		Token:  cfg.Secret,
+		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
+	})
+	fmt.Println(result)
+}
+
+func TestIntegrationGetRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.GetRule(context.Background(), iex.RequestRule{
+		Token:  cfg.Token,
+		RuleID: "ef5d5d6d-175e-41e5-9779-3114ba8a0826",
+	})
+	fmt.Println(result)
 }
 
 func assertInt(t *testing.T, label string, got, want int) {
