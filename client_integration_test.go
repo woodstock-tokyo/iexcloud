@@ -205,7 +205,7 @@ func TestIntegrationDeleteRule(t *testing.T) {
 	}
 	client := iex.NewClient(cfg.Secret, iex.WithBaseURL(cfg.BaseURL))
 
-	result, err := client.DeleteRulePriceAlert(context.Background(), "7395c2cc-dd12-4872-a176-31748b7b0cbb")
+	result, err := client.DeleteRule(context.Background(), "7395c2cc-dd12-4872-a176-31748b7b0cbb")
 	fmt.Println(result)
 }
 
@@ -216,7 +216,7 @@ func TestIntegrationPauseRule(t *testing.T) {
 	}
 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 
-	result, err := client.PauseRulePriceAlert(context.Background(), iex.RequestRule{
+	result, err := client.PauseRule(context.Background(), iex.RequestRule{
 		Token:  cfg.Secret,
 		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
 	})
@@ -230,7 +230,7 @@ func TestIntegrationResumeRule(t *testing.T) {
 	}
 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 
-	result, err := client.ResumeRulePriceAlert(context.Background(), iex.RequestRule{
+	result, err := client.ResumeRule(context.Background(), iex.RequestRule{
 		Token:  cfg.Secret,
 		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
 	})
@@ -244,7 +244,7 @@ func TestIntegrationGetRule(t *testing.T) {
 	}
 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 
-	result, err := client.GetRulePriceAlert(context.Background(), iex.RequestRule{
+	result, err := client.GetRule(context.Background(), iex.RequestRule{
 		Token:  cfg.Token,
 		RuleID: "ef5d5d6d-175e-41e5-9779-3114ba8a0826",
 	})

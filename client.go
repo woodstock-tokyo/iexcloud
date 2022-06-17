@@ -1588,7 +1588,7 @@ func (c Client) CreateRulePriceAlert(ctx context.Context, rule Rule) (result Cre
 	return
 }
 
-func (c Client) ResumeRulePriceAlert(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
+func (c Client) ResumeRule(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/resume")
 
@@ -1599,7 +1599,7 @@ func (c Client) ResumeRulePriceAlert(ctx context.Context, rule RequestRule) (res
 	return
 }
 
-func (c Client) PauseRulePriceAlert(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
+func (c Client) PauseRule(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/pause")
 
@@ -1610,7 +1610,7 @@ func (c Client) PauseRulePriceAlert(ctx context.Context, rule RequestRule) (resu
 	return
 }
 
-func (c Client) GetRulePriceAlert(ctx context.Context, req RequestRule) ([]RuleInfo, error) {
+func (c Client) GetRule(ctx context.Context, req RequestRule) ([]RuleInfo, error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/info/%s", req.RuleID)
 	var result []RuleInfo
@@ -1619,15 +1619,14 @@ func (c Client) GetRulePriceAlert(ctx context.Context, req RequestRule) ([]RuleI
 	return result, err
 }
 
-// DeleteRulePriceAlert
-//todo api doesn't work, still contact to iex support
-func (c Client) DeleteRulePriceAlert(ctx context.Context, ruleID string) (result bool, err error) {
+// DeleteRule delete the rule, token is secret
+func (c Client) DeleteRule(ctx context.Context, ruleID string) (result bool, err error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/%s", ruleID)
 
 	data, err := c.delete(ctx, endpoint, map[string]string{})
 
 	json.Unmarshal(data, &result)
-	
+
 	return
 }
