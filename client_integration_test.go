@@ -141,7 +141,7 @@ func TestIntegrationCreatRule(t *testing.T) {
 		Token:      cfg.Token,
 		RuleSet:    "AAPL",
 		Type:       "any",
-		RuleName:   "TestCreateByApi",
+		RuleName:   "TestCreateByApiNew1",
 		Conditions: []iex.Condition{condtion1},
 		Outputs: []iex.Output{
 			{
@@ -155,6 +155,42 @@ func TestIntegrationCreatRule(t *testing.T) {
 	result, err := client.CreateRulePriceAlert(context.Background(), rule)
 
 	assertInt(t, "weight", int(result.Weight), 1)
+
+	if err != nil {
+		log.Fatalf("Error getting historical prices: %s", err)
+	}
+
+}
+
+// it seems eix edit rule doesnt work, contact to support
+
+func TestIntegrationEditRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	condtion1 := iex.Condition{"changePercent", ">", 1}
+	rule := iex.Rule{
+		Token:      cfg.Token,
+		ID:         "6f6fc56e-516b-4568-b423-a66febca32a5",
+		RuleSet:    "AAPL",
+		Type:       "any",
+		RuleName:   "TestCreateByApiEditRule",
+		Conditions: []iex.Condition{condtion1},
+		Outputs: []iex.Output{
+			{
+				Frequency: 3600,
+				Method:    "webhook",
+				Url:       "https://test.ngrok.io",
+			},
+		},
+	}
+
+	result, err := client.CreateRulePriceAlert(context.Background(), rule)
+
+	assertInt(t, "weight", int(result.Weight), 0)
 
 	if err != nil {
 		log.Fatalf("Error getting historical prices: %s", err)
@@ -180,7 +216,7 @@ func TestIntegrationPauseRule(t *testing.T) {
 	}
 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 
-	result, err := client.PauseRulePriceAlert(context.Background(), iex.PauseResumeRule{
+	result, err := client.PauseRulePriceAlert(context.Background(), iex.RequestRule{
 		Token:  cfg.Secret,
 		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
 	})
@@ -194,9 +230,23 @@ func TestIntegrationResumeRule(t *testing.T) {
 	}
 	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
 
-	result, err := client.ResumeRulePriceAlert(context.Background(), iex.PauseResumeRule{
+	result, err := client.ResumeRulePriceAlert(context.Background(), iex.RequestRule{
 		Token:  cfg.Secret,
 		RuleID: "4fb997a3-8d5c-4eae-a433-6e8b341f7696",
+	})
+	fmt.Println(result)
+}
+
+func TestIntegrationGetRule(t *testing.T) {
+	cfg, err := readConfig("config_test.toml")
+	if err != nil {
+		log.Fatalf("Error reading config file: %s", err)
+	}
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+
+	result, err := client.GetRulePriceAlert(context.Background(), iex.RequestRule{
+		Token:  cfg.Token,
+		RuleID: "ef5d5d6d-175e-41e5-9779-3114ba8a0826",
 	})
 	fmt.Println(result)
 }

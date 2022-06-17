@@ -249,7 +249,6 @@ func (c *Client) delete(ctx context.Context, endpoint string) ([]byte, error) {
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	fmt.Println(string(body))
 	return body, nil
 }
 
@@ -1584,7 +1583,7 @@ func (c Client) CreateRulePriceAlert(ctx context.Context, rule Rule) (result Cre
 	return
 }
 
-func (c Client) ResumeRulePriceAlert(ctx context.Context, rule PauseResumeRule) (result CreatedRuleResponse, err error) {
+func (c Client) ResumeRulePriceAlert(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/resume")
 
@@ -1595,7 +1594,7 @@ func (c Client) ResumeRulePriceAlert(ctx context.Context, rule PauseResumeRule) 
 	return
 }
 
-func (c Client) PauseRulePriceAlert(ctx context.Context, rule PauseResumeRule) (result CreatedRuleResponse, err error) {
+func (c Client) PauseRulePriceAlert(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/pause")
 
@@ -1606,14 +1605,23 @@ func (c Client) PauseRulePriceAlert(ctx context.Context, rule PauseResumeRule) (
 	return
 }
 
+func (c Client) GetRulePriceAlert(ctx context.Context, req RequestRule) ([]RuleInfo, error) {
+
+	endpoint := fmt.Sprintf("/stable/rules/info/%s", req.RuleID)
+	var result []RuleInfo
+	err := c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{}, &result)
+
+	return result, err
+}
+
 // DeleteRulePriceAlert
-//todo api doens't work, still contact to iex support
+//todo api doesn't work, still contact to iex support
 func (c Client) DeleteRulePriceAlert(ctx context.Context, ruleID string) (result bool, err error) {
 
 	endpoint := fmt.Sprintf("/stable/rules/%s", ruleID)
 
 	data, err := c.delete(ctx, endpoint)
-	fmt.Println(data)
+
 	json.Unmarshal(data, &result)
 	return
 }
