@@ -218,9 +218,8 @@ func (c *Client) postBytes(ctx context.Context, endpoint string, payload io.Read
 
 		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
 
-	return body, nil
+	return ioutil.ReadAll(resp.Body)
 }
 
 func (c *Client) delete(ctx context.Context, endpoint string, queryParams map[string]string) ([]byte, error) {
@@ -253,9 +252,9 @@ func (c *Client) delete(ctx context.Context, endpoint string, queryParams map[st
 
 		return []byte{}, Error{StatusCode: resp.StatusCode, Message: msg}
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
 
-	return body, nil
+	return ioutil.ReadAll(resp.Body)
+
 }
 
 // Returns an URL object that points to the endpoint with optional query parameters.
@@ -1629,5 +1628,6 @@ func (c Client) DeleteRulePriceAlert(ctx context.Context, ruleID string) (result
 	data, err := c.delete(ctx, endpoint, map[string]string{})
 
 	json.Unmarshal(data, &result)
+	
 	return
 }
