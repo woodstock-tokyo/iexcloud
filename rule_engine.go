@@ -13,9 +13,9 @@ type (
 
 	// Output webhook case
 	Output struct {
-		Frequency int    `json:"frequency"`
-		Method    string `json:"method"`
-		Url       string `json:"url"`
+		Frequency float64 `json:"frequency"`
+		Method    string  `json:"method"`
+		Url       string  `json:"url"`
 	}
 	Condition []any
 
