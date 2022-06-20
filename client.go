@@ -1579,7 +1579,7 @@ func (c Client) PriceTarget(ctx context.Context, symbol string) (PriceTarget, er
 
 func (c Client) CreateRulePriceAlert(ctx context.Context, rule Rule) (result CreatedRuleResponse, err error) {
 
-	endpoint := fmt.Sprintf("/stable/rules/create")
+	endpoint := fmt.Sprintf("/rules/create")
 
 	data, err := c.PostJsonData(ctx, endpoint, rule)
 
@@ -1590,7 +1590,7 @@ func (c Client) CreateRulePriceAlert(ctx context.Context, rule Rule) (result Cre
 
 func (c Client) ResumeRule(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
 
-	endpoint := fmt.Sprintf("/stable/rules/resume")
+	endpoint := fmt.Sprintf("/rules/resume")
 
 	data, err := c.PostJsonData(ctx, endpoint, rule)
 
@@ -1601,7 +1601,7 @@ func (c Client) ResumeRule(ctx context.Context, rule RequestRule) (result Create
 
 func (c Client) PauseRule(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
 
-	endpoint := fmt.Sprintf("/stable/rules/pause")
+	endpoint := fmt.Sprintf("/rules/pause")
 
 	data, err := c.PostJsonData(ctx, endpoint, rule)
 
@@ -1612,7 +1612,7 @@ func (c Client) PauseRule(ctx context.Context, rule RequestRule) (result Created
 
 func (c Client) GetRule(ctx context.Context, req RequestRule) ([]RuleInfo, error) {
 
-	endpoint := fmt.Sprintf("/stable/rules/info/%s", req.RuleID)
+	endpoint := fmt.Sprintf("/rules/info/%s", req.RuleID)
 	var result []RuleInfo
 	err := c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{}, &result)
 
@@ -1622,7 +1622,7 @@ func (c Client) GetRule(ctx context.Context, req RequestRule) ([]RuleInfo, error
 // DeleteRule delete the rule, token is secret
 func (c Client) DeleteRule(ctx context.Context, ruleID string) (result bool, err error) {
 
-	endpoint := fmt.Sprintf("/stable/rules/%s", ruleID)
+	endpoint := fmt.Sprintf("/rules/%s", ruleID)
 
 	data, err := c.delete(ctx, endpoint, map[string]string{})
 
