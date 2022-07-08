@@ -1576,57 +1576,41 @@ func (c Client) PriceTarget(ctx context.Context, symbol string) (PriceTarget, er
 // Rule Engine Endpoints
 //
 //////////////////////////////////////////////////////////////////////////////
-
-func (c Client) CreateRulePriceAlert(ctx context.Context, rule Rule) (result CreatedRuleResponse, err error) {
-
+// CreateRule create a rule
+func (c Client) CreateRule(ctx context.Context, rule Rule) (result CreatedRuleResponse, err error) {
 	endpoint := fmt.Sprintf("/rules/create")
-
 	data, err := c.PostJsonData(ctx, endpoint, rule)
-
 	json.Unmarshal(data, &result)
-
 	return
 }
 
+// ResumeRule resume a rule
 func (c Client) ResumeRule(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
-
 	endpoint := fmt.Sprintf("/rules/resume")
-
 	data, err := c.PostJsonData(ctx, endpoint, rule)
-
 	json.Unmarshal(data, &result)
-
 	return
 }
 
+// PauseRule pause a rule
 func (c Client) PauseRule(ctx context.Context, rule RequestRule) (result CreatedRuleResponse, err error) {
-
 	endpoint := fmt.Sprintf("/rules/pause")
-
 	data, err := c.PostJsonData(ctx, endpoint, rule)
-
 	json.Unmarshal(data, &result)
-
 	return
 }
 
-func (c Client) GetRule(ctx context.Context, req RequestRule) ([]RuleInfo, error) {
-
+// GetRule get a rule
+func (c Client) GetRule(ctx context.Context, req RequestRule) (result []RuleInfo, err error) {
 	endpoint := fmt.Sprintf("/rules/info/%s", req.RuleID)
-	var result []RuleInfo
-	err := c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{}, &result)
-
+	err = c.GetJSONWithQueryParams(ctx, endpoint, map[string]string{}, &result)
 	return result, err
 }
 
-// DeleteRule delete the rule, token is secret
+// DeleteRule delete a rule
 func (c Client) DeleteRule(ctx context.Context, ruleID string) (result bool, err error) {
-
 	endpoint := fmt.Sprintf("/rules/%s", ruleID)
-
 	data, err := c.delete(ctx, endpoint, map[string]string{})
-
 	json.Unmarshal(data, &result)
-
 	return
 }
