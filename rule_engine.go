@@ -17,6 +17,7 @@ type (
 		Method    string  `json:"method"`
 		Url       string  `json:"url"`
 	}
+
 	Condition []any
 
 	RequestRule struct {
